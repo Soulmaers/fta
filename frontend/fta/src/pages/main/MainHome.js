@@ -852,7 +852,12 @@ export default function MainHome() {
                                             subtypeLabel = ev.trainingDetails?.subtype === 'OFP' ? 'ОФП' : 'ОСНОВНАЯ';
                                         }
 
-                                        const evLineupLabel = ev.squads && ev.squads.length > 0 ? ev.squads.map(s => s.lineupName || s.name).join(', ') : 'Все';
+                                        const evLineupLabel = (() => {
+                                            if (!ev.squads || ev.squads.length === 0) return 'Все';
+                                            // BIO: при выборе нескольких составов не перечислять — одна пометка «Все»
+                                            if (ev.type === 'BIO' && ev.squads.length > 1) return 'Все';
+                                            return ev.squads.map(s => s.lineupName || s.name).join(', ');
+                                        })();
                                         let pendingTasks = ev.computedPending;
 
                                         return (

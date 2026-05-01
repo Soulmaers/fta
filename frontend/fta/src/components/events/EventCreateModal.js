@@ -104,9 +104,13 @@ export default function EventCreateModal({ isOpen, onClose, onSave, onDelete, ed
         if (!editingEvent?.date) return false;
         const now = new Date();
         if (editingEvent.type === 'BIO') {
-            // Для BIO замеры доступны в тот же календарный день
-            const todayStr = now.toISOString().slice(0, 10);
-            return editingEvent.date <= todayStr;
+            // Для BIO замеры доступны в тот же календарный день (строго по локальному часовому поясу пользователя).
+            // Нельзя использовать toISOString() — это UTC: утром 2-го по Москве может быть ещё 1-е по UTC.
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            const todayLocal = `${y}-${m}-${d}`;
+            return editingEvent.date <= todayLocal;
         }
         const endDateTime = new Date(`${editingEvent.date}T${editingEvent.endTime || '23:59:59'}`);
         return now > endDateTime;
