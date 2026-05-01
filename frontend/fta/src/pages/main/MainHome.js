@@ -259,13 +259,12 @@ export default function MainHome() {
                     }
                 } else if (isPlayer) {
                     const wasReadyAtEventDate = (ev.playerStatusAtDate || 'READY') === 'READY';
-                    if (wasReadyAtEventDate) {
-                        if (ev.type === 'TRAINING') {
-                            if (ev.trainingDetails?.rpeEnabled !== false) totalTasks += 1;
-                            if (tests.includes('BIOBANDING')) totalTasks += 1;
-                        } else if (ev.type === 'BIO') {
-                            totalTasks = 1; // единственная задача — замер (БИО)
-                        }
+                    if (ev.type === 'TRAINING' && wasReadyAtEventDate) {
+                        if (ev.trainingDetails?.rpeEnabled !== false) totalTasks += 1;
+                        if (tests.includes('BIOBANDING')) totalTasks += 1;
+                    } else if (ev.type === 'BIO') {
+                        // BIO доступен для игрока в любом статусе (READY/SICK/INJURED)
+                        totalTasks = 1;
                     }
                 }
 
