@@ -18,6 +18,8 @@ frontend/fta/.env.local
 frontend/fta/.env.development.local
 frontend/fta/.env.test.local
 frontend/fta/.env.production.local
+frontend/fta/.env
+frontend/fta/.git_frontend_backup/
 
 # Backend artifacts
 backend/target/
