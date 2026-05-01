@@ -1,0 +1,99 @@
+.strip {
+    height: 82px;
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    user-select: none;
+    z-index: 10;
+}
+
+.stripDays {
+    flex: 1;
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 4px;
+    padding: 0;
+}
+
+.stripDays::-webkit-scrollbar {
+    display: none;
+}
+
+.dayChip {
+    min-width: 50px;
+    height: 72px;
+    padding-bottom: 4px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dayChipActive {
+    background: rgba(139, 195, 74, 0.05);
+    border: 1px solid #8bc34a;
+    box-shadow: 0 0 15px rgba(139, 195, 74, 0.4);
+}
+
+.dayD {
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.dayW {
+    font-size: 10px;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.dayChipActive .dayD {
+    color: #8bc34a;
+}
+
+.dayChipActive .dayW {
+    color: #8bc34a;
+}
+
+.dotsContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    height: 6px;
+    margin-top: 2px;
+}
+
+.eventDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    box-shadow: 0 0 6px currentColor; /* Свечение в цвет точки */
+}
+
+.eventDotMore {
+    font-size: 8px;
+    color: #fff;
+    font-weight: bold;
+    line-height: 6px;
+    margin-left: 1px;
+}
+
+.scrollBtn {
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 20px;
+    padding: 10px;
+    cursor: pointer;
+}

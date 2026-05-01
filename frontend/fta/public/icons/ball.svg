@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- outer ball -->
+  <circle cx="32" cy="32" r="29" stroke="currentColor" stroke-width="4"></circle>
+
+  <!-- center pentagon -->
+  <path d="M32 17.2l-9.2 6.7 3.5 10.7h11.4l3.5-10.7L32 17.2z" fill="currentColor"></path>
+
+  <!-- seams (panels) -->
+  <path d="M22.8 23.9L14.2 26.8" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
+  <path d="M41.2 23.9L49.8 26.8" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
+  <path d="M26.3 34.6L20.6 44.9" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
+  <path d="M37.7 34.6L43.4 44.9" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
+
+  <!-- top arcs -->
+  <path d="M14.2 26.8C18.1 18.7 24.4 14 32 14" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
+  <path d="M49.8 26.8C45.9 18.7 39.6 14 32 14" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
+
+  <!-- bottom arc -->
+  <path d="M20.6 44.9C25.5 50 38.5 50 43.4 44.9" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
+</svg>

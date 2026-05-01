@@ -1,0 +1,71 @@
+* {
+  box-sizing: border-box;
+  -ms-overflow-style: none; /* для IE/Edge */
+  scrollbar-width: none; /* для Firefox */
+}
+
+/* Скрыть скроллбары для всех элементов (Chrome/Safari/Opera), но оставить возможность скролла */
+::-webkit-scrollbar {
+  display: none;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  /* Глобально убираем скролл с body */
+  overscroll-behavior: none;
+  /* Убираем эффект "резинки" в браузере */
+}
+
+body {
+  margin: 0;
+  font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Arial, sans-serif;
+
+  background: #0b1020;
+  color: #e9eefc;
+
+  /* Отключить "pull-to-refresh" на мобильных Chrome/Safari */
+  overscroll-behavior-y: none;
+}
+
+/* Важное для мобилок: НЕ допускать горизонтального скролла */
+#root {
+  min-height: 100%;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Длинный текст/ссылки не ломают сетку */
+.break-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Grid/Flex дети не должны выпирать */
+/* ... */
+
+/* Global Page Transition - Slide In */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.page-enter {
+  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>FTA — Архитектура событий</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #0a0a0a;
+            font-family: 'Inter', sans-serif;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px 80px;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #ccff00;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #444;
+            margin-bottom: 60px;
+            letter-spacing: 2px;
+        }
+
+        .schema {
+            position: relative;
+            width: 1140px;
+            height: 860px;
+        }
+
+        .card {
+            position: absolute;
+            border-radius: 14px;
+            padding: 16px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #141414;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        /* ЯДРО */
+        .card-event {
+            left: 445px;
+            top: 280px;
+            width: 250px;
+            border: 2px solid #ccff00;
+            box-shadow: 0 0 40px rgba(204, 255, 0, 0.15), 0 0 80px rgba(204, 255, 0, 0.05);
+            z-index: 10;
+        }
+
+        .card-event .card-title {
+            color: #ccff00;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(204, 255, 0, 0.3);
+        }
+
+        /* ИГРОК — строго по центру сверху */
+        .card-player {
+            left: 445px;
+            top: 40px;
+            width: 250px;
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        /* ДЕТАЛИ ТРЕНИРОВКИ — слева */
+        .card-training {
+            left: 30px;
+            top: 280px;
+            width: 240px;
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        /* ДЕТАЛИ МАТЧА — справа */
+        .card-match {
+            left: 870px;
+            top: 280px;
+            width: 240px;
+            border: 1px solid rgba(255, 100, 100, 0.25);
+        }
+
+        .card-match .card-title {
+            color: #ff6b6b !important;
+        }
+
+        /* ПОСЕЩАЕМОСТЬ — снизу справа */
+        .card-attendance {
+            left: 750px;
+            top: 540px;
+            width: 240px;
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        /* РЕЗУЛЬТАТЫ ТЕСТОВ — снизу центр-лево, широкий */
+        .card-results {
+            left: 110px;
+            top: 540px;
+            width: 420px;
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .card-title {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .field {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 7px;
+            font-size: 12.5px;
+            color: #bbb;
+            line-height: 1.4;
+        }
+
+        .field-dot {
+            width: 5px;
+            height: 5px;
+            background: #2e2e2e;
+            border-radius: 50%;
+            margin-top: 5px;
+            flex-shrink: 0;
+        }
+
+        .field-dot.lime {
+            background: #ccff00;
+        }
+
+        .field-dot.red {
+            background: #ff6b6b;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 5px;
+            padding: 1px 7px;
+            font-size: 10px;
+            color: #555;
+            margin-left: 4px;
+        }
+
+        /* JSON блоки */
+        .json-block {
+            margin-top: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(204, 255, 0, 0.2);
+        }
+
+        .json-header {
+            background: rgba(204, 255, 0, 0.1);
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #ccff00;
+            letter-spacing: 0.5px;
+        }
+
+        .json-body {
+            background: rgba(204, 255, 0, 0.03);
+            padding: 8px 12px;
+        }
+
+        .json-field {
+            font-size: 11.5px;
+            color: #888;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        .json-field span.key {
+            color: #aaa;
+        }
+
+        .json-field span.val {
+            color: #666;
+            font-style: italic;
+        }
+
+        .json-note {
+            font-size: 10px;
+            color: #383838;
+            margin-top: 5px;
+        }
+
+        .json-divider {
+            height: 1px;
+            background: rgba(204, 255, 0, 0.1);
+        }
+
+        svg.arrows {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1140px;
+            height: 860px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .lbl {
+            font-size: 10px;
+            fill: #444;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .legend {
+            display: flex;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #444;
+        }
+
+        .legend-line {
+            width: 28px;
+            height: 2px;
+            background: #ccff00;
+        }
+
+        .legend-line.red-l {
+            background: #ff6b6b;
+        }
+
+        .legend-line.dashed {
+            background: none;
+            border-top: 2px dashed #333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>FTA — Архитектура системы событий</h1>
+    <p class="subtitle">Схема связей сущностей · Версия 1.2</p>
+
+    <div class="schema">
+
+        <svg class="arrows" viewBox="0 0 1140 860">
+            <defs>
+                <marker id="al" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="#ccff00" opacity="0.6" />
+                </marker>
+                <marker id="ag" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="#333" />
+                </marker>
+                <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="#ff6b6b" opacity="0.6" />
+                </marker>
+            </defs>
+
+            <!-- ИГРОК → СОБЫТИЕ (сверху вниз, центр) -->
+            <line x1="570" y1="168" x2="570" y2="278" stroke="#ccff00" stroke-width="1.5" stroke-opacity="0.45"
+                stroke-dasharray="5,4" marker-end="url(#al)" />
+            <text x="575" y="230" class="lbl">ссылки</text>
+
+            <!-- СОБЫТИЕ ← ДЕТАЛИ ТРЕНИРОВКИ (1:1) слева -->
+            <line x1="445" y1="335" x2="272" y2="335" stroke="#ccff00" stroke-width="1.5" stroke-opacity="0.6"
+                marker-end="url(#al)" />
+            <text x="320" y="325" class="lbl">1:1</text>
+
+            <!-- СОБЫТИЕ → ДЕТАЛИ МАТЧА (1:1) справа -->
+            <line x1="695" y1="335" x2="868" y2="335" stroke="#ff6b6b" stroke-width="1.5" stroke-opacity="0.5"
+                marker-end="url(#ar)" />
+            <text x="750" y="325" class="lbl">1:1</text>
+
+            <!-- СОБЫТИЕ → ПОСЕЩАЕМОСТЬ (1:N) вниз-вправо -->
+            <path d="M 620 460 Q 650 560 748 580" stroke="#ccff00" stroke-width="1.5" stroke-opacity="0.6" fill="none"
+                marker-end="url(#al)" />
+            <text x="665" y="530" class="lbl">1:N</text>
+
+            <!-- СОБЫТИЕ → РЕЗУЛЬТАТЫ ТЕСТОВ (1:N) вниз-влево -->
+            <path d="M 520 460 Q 480 540 410 540" stroke="#ccff00" stroke-width="1.5" stroke-opacity="0.6" fill="none"
+                marker-end="url(#al)" />
+            <text x="448" y="510" class="lbl">1:N</text>
+
+            <!-- ИГРОК → ПОСЕЩАЕМОСТЬ (пунктир) -->
+            <path d="M 695 110 Q 975 110 875 538" stroke="#333" stroke-width="1.2" fill="none" stroke-dasharray="5,4"
+                marker-end="url(#ag)" />
+            <text x="895" y="220" class="lbl">явка</text>
+
+            <!-- ИГРОК → РЕЗУЛЬТАТЫ ТЕСТОВ (пунктир) -->
+            <path d="M 445 110 Q 200 300 200 538" stroke="#333" stroke-width="1.2" fill="none" stroke-dasharray="5,4"
+                marker-end="url(#ag)" />
+            <text x="148" y="360" class="lbl">тесты</text>
+        </svg>
+
+        <!-- ═══ ИГРОК (сверху по центру) ═══ -->
+        <div class="card card-player">
+            <div class="card-title">👤 Игрок</div>
+            <div class="field">
+                <div class="field-dot"></div>ФИО
+            </div>
+            <div class="field">
+                <div class="field-dot"></div>Команда / Состав
+            </div>
+            <div class="field">
+                <div class="field-dot"></div>Позиция, Возраст
+            </div>
+            <div class="field">
+                <div class="field-dot lime"></div>Рост отца <span class="badge">скрыто</span>
+            </div>
+            <div class="field">
+                <div class="field-dot lime"></div>Рост матери <span class="badge">скрыто</span>
+            </div>
+        </div>
+
+        <!-- ═══ ДЕТАЛИ ТРЕНИРОВКИ (слева) ═══ -->
+        <div class="card card-training">
+            <div class="card-title">🏃 Детали тренировки</div>
+            <div class="field">
+                <div class="field-dot"></div>Подтип: ОФП / Основная
+            </div>
+            <div class="field">
+                <div class="field-dot lime"></div>Опрос RPE: Вкл / Выкл
+            </div>
+            <div class="field">
+                <div class="field-dot"></div>Тесты: Прыжок, Бег 30м,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Биобэндинг и
+                др.
+            </div>
+        </div>
+
+        <!-- ═══ СОБЫТИЕ — ЯДРО (центр) ═══ -->
+        <div class="card card-event">
+            <div class="card-title">⚡ СОБЫТИЕ — ЯДРО</div>
+            <div class="field">
+                <div class="field-dot lime"></div>ID
+            </div>
+            <div class="field">
+                <div class="field-dot lime"></div>Дата
+            </div>
+            <div class="field">
+                <div class="field-dot lime"></div>Время начала / конца
+            </div>
+            <div class="field">
+                <div class="field-dot lime"></div>Тип: Тренировка / Матч
+            </div>
+            <div class="field">
+                <div class="field-dot lime"></div>Место проведения
+            </div>
+            <div class="field">
+                <div class="field-dot lime"></div>Состав (АПЛ / БЛ / Оба)
+            </div>
+        </div>
+
+        <!-- ═══ ДЕТАЛИ МАТЧА (справа) ═══ -->
+        <div class="card card-match">
+            <div class="card-title">⚽ Детали матча</div>
+            <div class="field">
+                <div class="field-dot red"></div>Соперник
+            </div>
+            <div class="field">
+                <div class="field-dot red"></div>Турнир / Кубок
+            </div>
+            <div class="field">
+                <div class="field-dot red"></div>Дома / В гостях
+            </div>
+            <div class="field">
+                <div class="field-dot red"></div>Счёт (Наши : Они)
+            </div>
+            <div class="field">
+                <div class="field-dot"></div>Отчёт тренера
+            </div>
+        </div>
+
+        <!-- ═══ ПОСЕЩАЕМОСТЬ (снизу справа) ═══ -->
+        <div class="card card-attendance">
+            <div class="card-title">✅ Посещаемость</div>
+            <div class="field">
+                <div class="field-dot"></div>FK: Игрок
+            </div>
+            <div class="field">
+                <div class="field-dot"></div>FK: Событие
+            </div>
+            <div class="field">
+                <div class="field-dot lime"></div>Статус: Был / Опоздал / Нет
+            </div>
+            <div class="field">
+                <div class="field-dot lime"></div>Оценка RPE (1–10)
+            </div>
+            <div style="margin-top:10px; font-size:10px; color:#333;">* RPE только для тренировок</div>
+        </div>
+
+        <!-- ═══ РЕЗУЛЬТАТЫ ТЕСТОВ (снизу слева, широкий) ═══ -->
+        <div class="card card-results">
+            <div class="card-title">📊 Результаты тестов</div>
+            <div style="display:flex; gap:16px;">
+                <!-- Левый столбец -->
+                <div style="flex:1;">
+                    <div class="field">
+                        <div class="field-dot"></div>FK: Игрок
+                    </div>
+                    <div class="field">
+                        <div class="field-dot"></div>FK: Событие
+                    </div>
+                    <div class="field">
+                        <div class="field-dot"></div>Тип теста (Enum)
+                    </div>
+                    <div class="field">
+                        <div class="field-dot lime"></div>Числовое значение<br>
+                        <span style="font-size:10px;color:#444;">(Прыжок, Бег 30м и др.)</span>
+                    </div>
+                    <div style="margin-top:12px;font-size:10.5px;color:#333;">* JSON поля = null<br>для обычных тестов
+                    </div>
+                </div>
+                <!-- Правый столбец — JSON Биобэндинга -->
+                <div style="flex:1.4;">
+                    <div class="json-block">
+                        <div class="json-header">📦 ЗАМЕРЫ (JSON)</div>
+                        <div class="json-body">
+                            <div class="json-field"><span class="key">height</span>: <span class="val">152 (см)</span>
+                            </div>
+                            <div class="json-field"><span class="key">weight</span>: <span class="val">45 (кг)</span>
+                            </div>
+                            <div class="json-field"><span class="key">sitting_height</span>: <span class="val">82
+                                    (см)</span></div>
+                            <div class="json-note">↑ Что ввёл игрок</div>
+                        </div>
+                        <div class="json-divider"></div>
+                        <div class="json-header">📈 МЕТРИКИ (JSON)</div>
+                        <div class="json-body">
+                            <div class="json-field"><span class="key">predicted_height</span>: <span class="val">181
+                                    (см)</span></div>
+                            <div class="json-field"><span class="key">maturity_stage</span>: <span
+                                    class="val">Post-PHV</span></div>
+                            <div class="json-field"><span class="key">growth_velocity</span>: <span class="val">+2.1
+                                    (см/мес)</span></div>
+                            <div class="json-note">↑ Ответ от стороннего API</div>
+                        </div>
+                    </div>
+                    <div style="font-size:10px;color:#2e2e2e;margin-top:4px;text-align:right;">* только для Биобэндинга
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Легенда -->
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-line"></div>
+            <span>Связь с тренировкой (1:1 / 1:N)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-line red-l"></div>
+            <span>Связь с матчем (1:1)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-line dashed"></div>
+            <span>Косвенная связь через Игрока</span>
+        </div>
+        <div class="legend-item">
+            <div style="width:9px;height:9px;background:#ccff00;border-radius:2px;"></div>
+            <span>Ключевые поля</span>
+        </div>
+    </div>
+
+</body>
+
+</html>

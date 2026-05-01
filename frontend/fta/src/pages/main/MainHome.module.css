@@ -1,0 +1,1340 @@
+:root {
+    --bg1: #1e2a32;
+    --bg2: #15202a;
+    --shadow: 0 14px 40px rgba(0, 0, 0, .6);
+    --shadow2: 0 8px 24px rgba(0, 0, 0, .4);
+    --txt: rgba(255, 255, 255, .95);
+    --muted: rgba(255, 255, 255, .55);
+    --accent: #8bc34a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+button {
+    font: inherit;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+/* ─── Screen & Shell ─────────────────────────────── */
+.screen {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    background: transparent;
+    /* Убираем черный фон, чтобы видеть фон из Shell */
+}
+
+.shell {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* ─── Header ─────────────────────────────────────── */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px 10px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .07), transparent 80%);
+}
+
+.logoIconHeader {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    /* Строго сохраняем пропорции */
+    border-radius: 10px;
+}
+
+.logoPlaceholderHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.title {
+    flex: 1;
+    min-width: 0;
+    margin-left: 12px;
+}
+
+.titleMain {
+    font-size: clamp(14px, 4vw, 18px);
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.titleSub {
+    font-size: 15px;
+    color: #adb469;
+    font-weight: 600;
+    margin-top: 1px;
+}
+
+.iconBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, .14);
+    background: rgba(255, 255, 255, .10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8bc34a;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* ─── Calendar strip ─────────────────────────────── */
+.strip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, .07);
+}
+
+.scrollBtn {
+    width: 22px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8bc34a;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.stripDays {
+    flex: 1;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 2px 0;
+}
+
+.stripDays::-webkit-scrollbar {
+    display: none;
+}
+
+.dayChip {
+    min-width: 44px;
+    height: 56px;
+    border-radius: 13px;
+    border: 1.5px solid transparent;
+    background: rgba(255, 255, 255, .05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all .2s;
+}
+
+.dayChipActive {
+    border-color: #8bc34a;
+    background: rgba(139, 195, 74, .07);
+    box-shadow: 0 0 12px rgba(139, 195, 74, .25);
+}
+
+.dayD {
+    font-size: 17px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.dayW {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted);
+}
+
+.dayChipActive .dayD,
+.dayChipActive .dayW {
+    color: #8bc34a;
+}
+
+/* ─── Content ─────────────────────────────────────── */
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 8px 6px 6px;
+    border-radius: 24px 24px 16px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.eventsScrollContainer {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 14px 14px 10px;
+}
+
+.eventsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ─── Event Card ──────────────────────────────────── */
+.eventCard {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: rgba(30, 30, 30, .55);
+    border: 1.5px solid rgba(255, 255, 255, .09);
+    border-radius: 18px;
+    cursor: pointer;
+    transition: .18s ease;
+    min-height: 72px;
+    position: relative;
+}
+
+.eventCardActive {
+    border: 1px solid #8bc34a;
+    box-shadow: 0 0 16px rgba(139, 195, 74, .28);
+}
+
+.eventTimeCol {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 46px;
+}
+
+.dateText {
+    font-size: 19px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, .35);
+    line-height: 1;
+}
+
+.dateTextActive {
+    color: #8bc34a;
+}
+
+.timeRange {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.timeText {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, .75);
+}
+
+.timeDivider {
+    width: 10px;
+    height: 1.5px;
+    background: rgba(255, 255, 255, .2);
+    margin: 2px 0;
+}
+
+.eventIconWrap {
+    width: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.eventDetails {
+    flex: 1;
+    min-width: 0;
+}
+
+.eventTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.eventSubtype {
+    position: absolute;
+    bottom: 8px;
+    right: 14px;
+    font-size: 9px;
+    color: #8bc34a;
+    text-shadow: 0 0 8px rgba(139, 195, 74, 0.6);
+    text-transform: uppercase;
+    font-weight: 400;
+    letter-spacing: 0.8px;
+}
+
+.eventSub {
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.taskBadge {
+    align-items: center;
+    background: darkred;
+    border: 1px solid #fff3;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #8b000099;
+    color: #fff;
+    display: flex;
+    font-size: 10px;
+    /* font-weight: 800; */
+    height: 18px;
+    justify-content: center;
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    width: 18px;
+    z-index: 10;
+}
+
+.squadIndicator {
+    font-size: 13px;
+    color: #8bc34a;
+    flex-shrink: 0;
+    margin-left: 8px;
+}
+
+/* ─── FAB ─────────────────────────────────────────── */
+.fabBtn {
+    position: fixed;
+    bottom: 100px;
+    right: 18px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #000;
+    color: #8bc34a;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #8bc34a;
+    box-shadow: 0 0 16px rgba(139, 195, 74, 0.5), 0 0 32px rgba(139, 195, 74, 0.2);
+    z-index: 100;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+}
+
+.fabBtn:active {
+    box-shadow: 0 0 24px rgba(139, 195, 74, 0.8);
+    transform: scale(0.96);
+}
+
+/* ─── Bottom Nav ──────────────────────────────────── */
+.bottomNav {
+    background: linear-gradient(180deg, rgba(20, 20, 20, 0.9) 0%, rgba(0, 0, 0, 1) 100%);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+    /* Гарантируем перекрытие любых щелей снизу */
+    box-shadow: 0 50px 0 50px #000;
+}
+
+.navItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Центрируем, чтобы не вылетало */
+    gap: 2px;
+    /* Уменьшили зазор */
+    height: 100%;
+    /* Убрали жесткий лимит 48px */
+    color: rgba(255, 255, 255, .38);
+    flex: 1;
+    cursor: pointer;
+}
+
+.navActive {
+    color: #8bc34a;
+}
+
+.navIconImg {
+    height: 32px;
+    /* Уменьшили до 32px, чтобы влезло */
+    width: 32px;
+    object-fit: contain;
+    opacity: 0.8;
+    filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.4));
+    transition: all 0.3s ease;
+}
+
+.navActive .navIconImg {
+    opacity: 1;
+}
+
+.navIcon {
+    font-size: 28px;
+    /* Сделали крупнее, чтобы соответствовало эмблемам */
+}
+
+.navText {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+
+/* ─── Team Selector Dropdown ───────────────────────── */
+.chevronIcon {
+    font-size: 10px;
+    margin-left: 8px;
+    opacity: 0.5;
+    vertical-align: middle;
+}
+
+.teamDropdown {
+    position: absolute;
+    top: 75px;
+    left: 16px;
+    right: 16px;
+    background: rgba(25, 25, 25, 0.96);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 12px;
+    z-index: 1000;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 0 1000px rgba(0, 0, 0, 0.3);
+    animation: dropdownFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-12px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.dropdownHeader {
+    font-size: 10px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.35);
+    margin-bottom: 12px;
+    margin-left: 10px;
+    margin-top: 4px;
+    letter-spacing: 1.2px;
+}
+
+.teamOption {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.teamOption:active {
+    background: rgba(255, 255, 255, 0.08);
+    transform: scale(0.98);
+}
+
+.teamOptionActive {
+    background: rgba(139, 195, 74, 0.12);
+    border-color: rgba(139, 195, 74, 0.2);
+}
+
+.dropdownTeamLogo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    flex-shrink: 0;
+}
+
+.dropdownLogoPlaceholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dropdownTeamName {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.checkIcon {
+    color: #8bc34a;
+    font-size: 14px;
+    filter: drop-shadow(0 0 5px rgba(139, 195, 74, 0.5));
+}
+
+.dropdownOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+}
+
+/* TABS / DASHBOARD */
+.mainContentArea {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.teamDashboard {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    padding-top: 0; /* Прижали к верху */
+    -webkit-overflow-scrolling: touch;
+}
+
+.lineupSwitcherContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.lineupSwitcher {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 4px; /* Уменьшили до 4px */
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+    max-width: 100%;
+}
+
+.lineupSwitcher::-webkit-scrollbar {
+    display: none;
+}
+
+.lineupPill {
+    white-space: nowrap;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    max-width: 150px; /* Ограничили по ширине */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lineupPillActive {
+    background: rgba(139, 195, 74, 0.2);
+    border-color: #8bc34a;
+    color: #8bc34a;
+}
+
+.bentoGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: minmax(110px, auto);
+    gap: 12px;
+}
+
+@media (max-width: 350px) {
+    .bentoGrid {
+        gap: 8px;
+    }
+
+    .bentoCard {
+        border-radius: 16px;
+    }
+
+    .cardContent {
+        padding: 12px;
+    }
+
+    .squadCount {
+        font-size: 36px;
+    }
+}
+
+.bentoCard {
+    position: relative;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.12);
+    /* Еще светлее для стеклянного эффекта */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.bentoCard:active {
+    transform: scale(0.98);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.cardLarge {
+    grid-column: span 2;
+    min-height: 180px;
+}
+
+.cardMedium {
+    grid-column: span 2;
+    min-height: 140px;
+}
+
+.cardSmall {
+    grid-column: span 1;
+    min-height: 120px;
+}
+
+.cardOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(139, 195, 74, 0.1) 0%, transparent 100%);
+    z-index: 1;
+}
+
+.cardContent {
+    position: relative;
+    z-index: 2;
+    padding: 16px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    position: relative;
+    width: 100%;
+}
+
+.cardArrow {
+    margin-left: auto;
+    font-size: 10px;
+    color: #8bc34a; /* Неоновый зеленый */
+    text-shadow: 0 0 10px rgba(139, 195, 74, 0.5); /* Эффект свечения */
+    transition: all 0.2s;
+    opacity: 0.8;
+}
+
+.bentoCard:active .cardArrow {
+    transform: translateX(4px) scale(1.2);
+    opacity: 1;
+}
+
+.cardIcon {
+    color: #8bc34a;
+    font-size: 16px;
+}
+
+.cardTitle {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mockHint {
+    font-size: 10px;
+    font-weight: 400;
+    color: #ea5455;
+    text-transform: none;
+    opacity: 0.8;
+}
+
+/* Squad Preview */
+.squadPreview {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+}
+
+.squadMainRow {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.squadCount {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1;
+    color: #fff;
+}
+
+.squadLabel {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.positionGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+}
+
+.posItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.posItem span {
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.posItem strong {
+    font-size: 14px;
+    color: #fff;
+}
+
+.statusSection {
+    margin-top: 0; /* Убрали отступ по просьбе пользователя */
+}
+
+.statusRow {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.statusChip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    font-size: 12px;
+    color: #fff;
+    font-weight: 600;
+}
+
+.statusDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.dotReady {
+    background: #8bc34a;
+    color: #8bc34a;
+}
+
+.dotInjured {
+    background: #f44336;
+    color: #f44336;
+}
+
+.dotSick {
+    background: #ffc107;
+    color: #ffc107;
+}
+
+.avatarStack {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.rpeTrendContainer {
+    position: absolute;
+    bottom: 16px; /* Опустили чуть ниже */
+    right: 18px;
+    /* width: 100px; */ /* Можно убрать фиксированную ширину если нужно */
+    width: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px; /* Уменьшили gap */
+}
+
+.rpeTrendLabel,
+.statusSectionLabel {
+    font-size: 8px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.3); /* Чуть светлее */
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    display: block;
+}
+
+.rpeSvg {
+    width: 100%;
+    height: 24px; /* Сделали чуть компактнее */
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.1));
+    overflow: visible;
+}
+
+.miniAvatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #1a1a1a;
+    background: #333;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.miniAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.moreAvatars {
+    margin-left: 8px;
+    font-size: 13px;
+    color: #8bc34a;
+    font-weight: 600;
+}
+
+.statusIndicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #bbb;
+}
+
+.statusLive {
+    background: #ea5455;
+    animation: livePulse 1.5s infinite;
+    box-shadow: 0 0 10px #ea5455;
+}
+
+@keyframes livePulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.statusFinished {
+    background: #8bc34a;
+}
+
+.miniAvatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #1a1a1a;
+    background: #333;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.miniAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.moreAvatars {
+    margin-left: 8px;
+    font-size: 13px;
+    color: #8bc34a;
+    font-weight: 600;
+}
+
+/* Match Brief Expanded */
+.matchBrief {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.upcomingPromo {
+    margin-top: 10px;
+}
+
+.matchLeagueLabel {
+    font-size: 9px;
+    font-weight: 800;
+    color: #8bc34a;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 6px;
+    opacity: 0.7;
+}
+
+.matchVsRow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 4px;
+}
+
+.matchClubLogo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.15));
+}
+
+.matchVsMain {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.vsPrefix {
+    font-size: 13px;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 300;
+}
+
+.opponentName {
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+}
+
+.matchDateMain {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.matchLocation {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+    font-weight: 600;
+}
+
+.formDotsTop {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    display: flex;
+    gap: 5px;
+}
+
+.formDotSmall {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dotW {
+    background: #28c76f;
+    box-shadow: 0 0 10px #28c76f, 0 0 3px #28c76f;
+}
+
+.dotL {
+    background: #ea5455;
+    box-shadow: 0 0 10px #ea5455, 0 0 3px #ea5455;
+}
+
+.dotD {
+    background: #ff9f43;
+    box-shadow: 0 0 10px #ff9f43, 0 0 3px #ff9f43;
+}
+
+/* Match Split View */
+.matchSplitView {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    gap: 0;
+    margin-top: 5px;
+}
+
+.matchSide {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px;
+}
+
+.sideLabel {
+    font-size: 10px;
+    font-weight: 800;
+    color: #8bc34a;
+    margin-bottom: 4px;
+    opacity: 0.8;
+}
+
+.matchVsSmall {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.matchDateSmall {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 8px;
+}
+
+.formDotsSide {
+    display: flex;
+    gap: 4px;
+}
+
+.matchDivider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+/* Squad Position Modernization */
+.posLabelBig {
+    font-size: 38px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.05);
+    /* Легкий фантомный эффект */
+    line-height: 1;
+    letter-spacing: -2px;
+}
+
+/* Match Afisha (Logo vs Logo) */
+.matchLeagueLabelBadge {
+    display: inline-block;
+    font-size: 8px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.4); /* Приглушенный белый */
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    background: none;
+    padding: 0;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.matchAfisha {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: -5px 0 0 0;
+    /* Подняли максимально высоко, убрав верхний отступ */
+    flex: 1;
+}
+
+.matchTeamSide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    /* Уменьшили зазор */
+    width: 40%;
+}
+
+.afishaLogoBig {
+    width: 68px;
+    height: 68px;
+    object-fit: contain;
+    /* Обеспечиваем сжатие без искажения пропорций */
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.2));
+}
+
+.opponentLogoPlaceholder {
+    width: 68px;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: rgba(255, 255, 255, 0.4); /* Светло-серый */
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.afishaTeamName {
+    font-size: 9.5px;
+    font-weight: 800;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    line-height: 1.1;
+    min-height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow: visible;
+    white-space: normal;
+}
+
+.afishaVsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 22px;
+}
+
+.matchStatusIcon {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.3); /* Светло-серый по умолчанию */
+}
+
+.afishaVs {
+    font-size: 20px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+}
+
+.matchInfoRow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 12px;
+    margin-top: auto;
+    width: 100%;
+}
+
+.matchDetailsRow {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+.matchDateTime {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.matchTime {
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.matchDateDivider {
+    color: rgba(255, 255, 255, 0.15);
+    font-size: 12px;
+}
+
+.matchDayShort {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.matchLocation {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    text-align: right;
+}
+
+/* Tournament Leagues List */
+.leagueList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    flex: 1;
+    justify-content: center;
+}
+
+.leagueRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 0;
+}
+
+.leagueName {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.leagueFormDots {
+    display: flex;
+    gap: 4px;
+}
+
+.formDotMini {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+/* Placeholder for empty tabs */
+.emptyTab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    text-align: center;
+    opacity: 0.5;
+}
+
+/* Unified Badges for Home */
+.searchBar {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+    padding-top: 12px;
+    padding-bottom: 12px;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.taskGlobalBadge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.taskDoneBadge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(40, 199, 111, 0.15);
+    border: 1px solid rgba(40, 199, 111, 0.4);
+    flex-shrink: 0;
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    opacity: 0.5;
+}
+
+.emptyIcon {
+    margin-bottom: 16px;
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.emptyTitle {
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+.emptySub {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 8px;
+}
+
+.monthText {
+    font-size: 8px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

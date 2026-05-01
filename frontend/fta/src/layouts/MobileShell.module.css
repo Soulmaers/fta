@@ -1,0 +1,65 @@
+.page {
+    position: fixed;
+    /* Фиксируем страницу, чтобы она не "гуляла" */
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    /* На всякий случай кросс-браузерные единицы */
+    height: 100svh;
+    height: 100dvh;
+
+    overflow: hidden;
+    background: #0b1020;
+
+    /* Самое важное для отключения "резинового" скролла всей страницы */
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* тот же фон/обои, что у тебя */
+.page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(120% 60% at 50% 0%, rgba(255, 255, 255, 0.10), transparent 62%),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.60)),
+        url("../assets/training.webp");
+
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.03);
+}
+
+.main {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.6);
+
+}
+
+.container {
+    width: 100%;
+    max-width: 430px;
+    height: 100%;
+
+    /* чтобы низ не резался — контейнер управляет раскладкой */
+    display: flex;
+    flex-direction: column;
+
+    /* важно: НЕ скрываем всё, иначе контент не сможет скроллиться */
+    overflow: hidden;
+}
+
+@media (orientation: landscape) {
+    .container {
+        /* Allow full width in landscape/desktop */
+        max-width: 100%;
+        padding: 0 50px;
+        /* Some padding for comfort */
+    }
+}

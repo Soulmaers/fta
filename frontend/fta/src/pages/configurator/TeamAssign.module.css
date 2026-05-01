@@ -1,0 +1,639 @@
+.screen {
+    background: linear-gradient(180deg, #1c2125d6 0,
+            #1c2125a1 30%, #0000 50%), url('../../assets/field.webp') 50% / cover no-repeat;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    /* Prevent vertical/horizontal leak */
+    overflow-x: hidden;
+    /* Explicitly prevent horizontal riding */
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Header Section with Dark Grey Background */
+.topSection {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+}
+
+.header {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px;
+    align-items: center;
+    padding: 8px 14px;
+}
+
+.back {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    border: 0;
+    background: transparent;
+    color: rgba(255, 255, 255, .76);
+    cursor: pointer;
+
+    padding: 0;
+    border-radius: 10px;
+}
+
+.back:active {
+    transform: translateY(1px);
+}
+
+.backArrow {
+    font-size: 22px;
+    line-height: 1;
+}
+
+.backText {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.headerTitle {
+    justify-self: center;
+    color: #d9d638;
+    letter-spacing: .2px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, .25);
+}
+
+/* Team Hero */
+.teamHero {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 6px 18px 12px;
+}
+
+.logoBox {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logoImg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+.logoPlaceholder {
+    color: #aebba5;
+}
+
+.teamName {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.85);
+    /* Slightly darkened white */
+}
+
+.teamYear {
+    font-size: 13px;
+    color: #d9d638;
+    ;
+    /* Orange color */
+    margin: 2px 0 0;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    padding: 0 12px;
+    /* Align with content padding */
+}
+
+.tab {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    color: rgba(255, 255, 255, 0.4);
+    padding: 10px 0;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.tabActive {
+    color: #9bdd44;
+}
+
+.tabActive::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #9bdd44;
+}
+
+/* iPhone Style Switch */
+.switchWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    /* Ensure consistent height */
+}
+
+.switchHidden {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: none !important;
+}
+
+.switchHidden * {
+    transition: none !important;
+}
+
+.searchSection {
+    padding: 10px 12px 14px;
+    background: transparent;
+    /* Removed grey background */
+}
+
+.searchBar {
+    background: rgba(45, 55, 65, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 10px;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.searchBar:focus-within {
+    border-color: #9bdd44;
+    background: rgba(45, 55, 65, 0.6);
+}
+
+.searchIcon {
+    font-size: 14px;
+    opacity: 0.5;
+}
+
+.searchInput {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    color: #fff;
+    font-size: 16px;
+    /* 16px prevents iOS auto-zoom which causes screen riding */
+    outline: none;
+    padding: 0;
+}
+
+.searchInput::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.clearSearch {
+    background: transparent;
+    border: 0;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+}
+
+.clearSearch:hover {
+    color: #fff;
+}
+
+
+.switchLabel {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.3);
+    min-width: 40px;
+    text-align: center;
+    transition: color 0.3s;
+}
+
+.switchLabelActive {
+    color: #9bdd44;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 22px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(155, 221, 68, 0.25);
+    /* Always salad path */
+    transition: .4s;
+    border-radius: 34px;
+    border: 1px solid rgba(155, 221, 68, 0.4);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+input:checked+.slider {
+    background-color: rgba(155, 221, 68, 0.4);
+    border-color: #9bdd44;
+}
+
+input:checked+.slider:before {
+    transform: translateX(22px);
+}
+
+
+/* Main Content Area - Fixed Width and No Overflow */
+.content {
+    flex: 1;
+    display: flex;
+    gap: 8px;
+    padding: 8px 12px;
+    min-height: 0;
+    overflow: hidden;
+    width: 100%;
+}
+
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    min-width: 0;
+    /* Critical for flex items to not overflow child */
+}
+
+.columnTitle {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7);
+    /* Lightened from 0.4 */
+    font-weight: 400;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+.list {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 6px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    backdrop-filter: blur(2px);
+}
+
+/* Card Styling */
+.card {
+    background: #2f2d2d7a;
+    border-radius: 6px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    position: relative;
+    /* For absolute badge */
+    min-height: 54px;
+}
+
+.infoBtn {
+    position: absolute;
+    align-items: center;
+    color: #fff9;
+    cursor: pointer;
+    display: flex;
+    flex-shrink: 0;
+    font-size: 11px;
+    height: 22px;
+    justify-content: center;
+    position: absolute;
+    right: 2px;
+    top: 6px;
+    border: none;
+    transition: all .2s;
+    width: 22px;
+    z-index: 10;
+    background: none;
+}
+
+
+
+.infoBtn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #9bdd44;
+}
+
+
+.card:active {
+    transform: scale(0.98);
+}
+
+.cardAssigned {
+    background: linear-gradient(180deg, #173823c2, #0b24148f);
+    border-color: rgba(155, 221, 68, 0.25);
+    box-shadow: inset 0 0 10px rgba(155, 221, 68, 0.05);
+}
+
+.cardThumb,
+.avatarBox {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border: 1px solid rgba(155, 221, 68, 0.2);
+}
+
+.thumbImg,
+.avatarImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.numberCircle {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.avatarPlaceholder {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 16px;
+}
+
+.cardInfo {
+    flex: 1;
+    max-width: 120px;
+}
+
+.cardName {
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.cardSub {
+    font-size: 9px;
+    color: #d9d638;
+    ;
+    /* Orange color */
+    font-weight: 500;
+}
+
+.compBadge {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    background: #9bdd44;
+    color: #000;
+    font-size: 7.5px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-weight: 800;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    transition: all 0.2s;
+}
+
+.compBadgeInteractive:hover {
+    background: #c1ff72;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(155, 221, 68, 0.3);
+}
+
+.compBadgeInteractive:active {
+    transform: scale(0.95);
+}
+
+.syncIcon {
+    font-size: 8px;
+    opacity: 0.7;
+}
+
+/* Footer */
+.footer {
+    padding: 8px 12px 20px;
+}
+
+.saveBtn {
+    width: 100%;
+    height: 52px;
+    background: rgba(155, 221, 68, 0.2);
+    border: 1px solid rgba(155, 221, 68, 0.4);
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+}
+
+.saveBtn:active {
+    background: rgba(155, 221, 68, 0.35);
+}
+
+/* Modal Styles */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backdrop-filter: blur(8px);
+    /* Background removed, only blur kept */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: #1c2125;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.modalHeader {
+    padding: 24px;
+    background: linear-gradient(to bottom, #2c3135, #1c2125);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+}
+
+.modalThumb {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(45, 55, 65, 0.8);
+    border: 2px solid #9bdd44;
+}
+
+.modalImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modalPlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.modalHeaderInfo {
+    flex: 1;
+}
+
+.modalName {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    color: #fff;
+}
+
+.modalSub {
+    font-size: 14px;
+    color: #ff9800;
+    margin: 4px 0 0;
+}
+
+.closeModal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: 0;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modalBody {
+    padding: 24px;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.statItem {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.statLabel {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.statVal {
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.modalFooter {
+    padding: 16px 24px 24px;
+}
+
+.modalCloseBtn {
+    width: 100%;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.modalCloseBtn:active {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Custom Scrollbar - Hidden for cleaner look on desktop */
+.list::-webkit-scrollbar {
+    display: none;
+}
+
+.list {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
