@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import styles from "./MainHome.module.css";
 import {
     FaUser, FaHome, FaChartBar, FaClipboardList, FaCog, FaPlus,
@@ -154,18 +154,10 @@ export default function MainHome() {
         }
     }, [selectedDayId, events, days]);
 
-    useEffect(() => {
-        if (auth?.id) {
-            loadEvents();
-            loadEntities('teams', auth.id);
-            loadEntities('lineups', auth.id);
-            loadEntities('players', auth.id);
-        }
-    }, [auth]);
-
-    const loadEvents = async () => {
+    const loadEvents = useCallback(async (opts = {}) => {
+        const silent = opts.silent === true;
         if (!auth?.id) return;
-        setIsLoadingEvents(true);
+        if (!silent) setIsLoadingEvents(true);
         try {
             const data = await apiFetch(`/api/events/${auth.id}`);
             const rawEvents = data || [];
@@ -198,9 +190,43 @@ export default function MainHome() {
         } catch (e) {
             console.error("Failed to load events", e);
         } finally {
-            setIsLoadingEvents(false);
+            if (!silent) setIsLoadingEvents(false);
         }
-    };
+    }, [auth?.id, isPlayer]);
+
+    useEffect(() => {
+        if (auth?.id) {
+            loadEvents();
+            loadEntities('teams', auth.id);
+            loadEntities('lineups', auth.id);
+            loadEntities('players', auth.id);
+        }
+    }, [auth?.id, loadEvents, loadEntities]);
+
+    // Возврат во вкладку / в приложение + фоновый опрос, пока экран открыт
+    useEffect(() => {
+        if (!auth?.id) return;
+
+        const refreshIfVisible = () => {
+            if (document.visibilityState === 'visible') loadEvents({ silent: true });
+        };
+
+        document.addEventListener('visibilitychange', refreshIfVisible);
+        window.addEventListener('focus', refreshIfVisible);
+        window.addEventListener('pageshow', refreshIfVisible);
+
+        const intervalMs = 120_000;
+        const id = window.setInterval(() => {
+            if (document.visibilityState === 'visible') loadEvents({ silent: true });
+        }, intervalMs);
+
+        return () => {
+            document.removeEventListener('visibilitychange', refreshIfVisible);
+            window.removeEventListener('focus', refreshIfVisible);
+            window.removeEventListener('pageshow', refreshIfVisible);
+            window.clearInterval(id);
+        };
+    }, [auth?.id, loadEvents]);
 
     const handleSaveEvent = async (payload, scope = 'SINGLE') => {
         if (payload.id) {
@@ -928,6 +954,7 @@ export default function MainHome() {
                 <div className={styles.bottomNav}>
                     <div className={`${styles.navItem} ${activeTab === 'home' ? styles.navActive : ''}`} onClick={() => {
                         setActiveTab('home');
+                        loadEvents({ silent: true });
                         setSelectedDayId(todayId);
                         setShowOnlyPending(false);
                         setSearchQuery('');
